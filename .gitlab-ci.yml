@@ -1,4 +1,3 @@
-
 stages:
   - build
   - test
@@ -23,7 +22,3 @@ run_tests:
     - pytest -m "not hil"
   needs:
     - build_firmware
-
-
-
-
