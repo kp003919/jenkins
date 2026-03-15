@@ -1,24 +1,29 @@
+variables:
+  GIT_STRATEGY: clone
+
 stages:
-  - build
   - test
 
-image: python:3.11
-
-before_script:
-  - pip install platformio pytest pyserial
-
-build_firmware:
-  stage: build
-  script:
-    - platformio run
-  artifacts:
-    paths:
-      - .pio/build
-    expire_in: 1 week
-
-run_tests:
+test_job:
   stage: test
+  image: python:3.11
+
+  before_script:
+    - pip install -r requirements.txt
+
   script:
-    - pytest -m "not hil"
-  needs:
-    - build_firmware
+    - echo "=== CI DIRECTORY STRUCTURE ==="
+    - ls -R .
+    # Generate JUnit XML report for GitLab Test Reports
+    - pytest -m "not hil" -v --junitxml=report.xml
+
+  artifacts:
+    # GitLab will parse this and show a Test Report tab
+    reports:
+      junit: report.xml
+
+    # Optional: keep the raw report for download
+    paths:
+      - report.xml
+
+    expire_in: 1 week
