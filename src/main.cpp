@@ -131,10 +131,7 @@ void loop() {
     UART2_Task();
     const char* data = UART2_GetPacket();
 
-    if (data) {
-        Serial.print("Received from ESP32: ");
-        Serial.println(data);
-
+    if (data) {       
         if (strcmp(data, "PING") == 0) {
             Serial.println("[TEST] PONG");
         } 
@@ -199,6 +196,7 @@ void loop() {
 
     if (now - lastDHT > DHT_INTERVAL) {
         StaticJsonDocument<256> doc;
+
         doc["type"] = "dht";
         doc["id"]   = DEVICE_ID;
         doc["ts"]   = now;

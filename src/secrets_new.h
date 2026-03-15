@@ -4,8 +4,8 @@
 #define SECRET_NEW
  
 // WiFi credentials
-#define WIFI_SSID     "YOUR_WIFI_SSID_HERE"
-#define WIFI_PASSWORD "YOUR_WIFI_PASSWORD_HERE"
+#define WIFI_SSID     "VM1080293"
+#define WIFI_PASSWORD "Omidmuhsin2015"
 
 
 // MQTT client ID

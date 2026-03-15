@@ -11,26 +11,26 @@ pipeline {
 
         stage('Install PlatformIO') {
             steps {
-                bat 'pip install -U platformio'
+                sh 'pip3 install -U platformio'
             }
         }
 
         stage('Build HIL Firmware') {
             steps {
-                bat 'pio run -e hil_test'
+                sh 'pio run -e hil_test'
             }
         }
 
         stage('Upload Firmware') {
             steps {
-                bat 'pio run -e hil_test -t upload'
+                sh 'pio run -e hil_test -t upload'
                 sleep 3
             }
         }
 
         stage('Run HIL Tests') {
             steps {
-                bat 'pytest --junitxml=pytest-report.xml'
+                sh 'pytest --junitxml=pytest-report.xml'
             }
         }
     }

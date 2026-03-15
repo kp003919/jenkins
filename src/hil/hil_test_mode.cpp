@@ -2,6 +2,18 @@
 #include <ArduinoJson.h>
 #include "hil_test_mode.h"
 #include "config.h"
+#include <NimBLEDevice.h>
+
+
+// ---------- WiFi ----------
+#include <WiFi.h>
+
+// ---------- MQTT (placeholder) ----------
+bool mqttConnected() {
+    // Replace with your real MQTT client check:
+    // return mqttClient.connected();
+    return false;  // default until you integrate real MQTT
+}
 
 // ---------- DHT ----------
 #include <DHT.h>
@@ -93,14 +105,60 @@ void startHilTestMode() {
         }
 
         // ---------- RTLS (stubbed) ----------
-    else if (cmd == "TEST_RTLS") {
-    StaticJsonDocument<64> doc;
-    JsonArray arr = doc.createNestedArray("rtls");  // empty list
+  
+        else if (cmd == "TEST_RTLS") {
+
+    NimBLEScan* scan = BLEDevice::getScan();
+    scan->stop();                 // <-- FIX: stop background scan
+    scan->setActiveScan(true);
+    scan->setInterval(45);
+    scan->setWindow(15);
+
+    scan->start(3, false);        // scan for 3 seconds
+
+    NimBLEScanResults results = scan->getResults();
+
+    StaticJsonDocument<512> doc;
+    JsonArray arr = doc.createNestedArray("rtls");
+
+    for (int i = 0; i < results.getCount(); i++) {
+        const NimBLEAdvertisedDevice* dev = results.getDevice(i);
+        JsonObject obj = arr.createNestedObject();
+        obj["mac"] = dev->getAddress().toString().c_str();
+        obj["rssi"] = dev->getRSSI();
+    }
+
+    scan->clearResults();
+
     Serial.print("[TEST] ");
     serializeJson(doc, Serial);
     Serial.println();
 }
 
+
+
+        // ---------- WIFI ----------
+        else if (cmd == "TEST_WIFI") {
+            
+            bool wifi_ok = (WiFi.status() == WL_CONNECTED);
+
+            if (wifi_ok) {
+                Serial.println("[TEST] WIFI_OK");
+            } else {
+                Serial.println("[TEST] WIFI_FAIL");
+            }
+        }
+
+        // ---------- MQTT ----------
+        else if (cmd == "TEST_MQTT") {
+            bool mqtt_ok = mqttConnected();
+
+            if (mqtt_ok) {
+                Serial.println("[TEST] MQTT_OK");
+            } else {
+                Serial.println("[TEST] MQTT_FAIL");
+            }
+        }
 
         // ---------- Unknown ----------
         else {
