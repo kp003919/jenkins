@@ -10,9 +10,14 @@
 #include <ArduinoJson.h>
 #include "hil_test_mode.h"
 #include "config.h"
+<<<<<<< HEAD
 #include"SPI.h"
 #include <NimBLEDevice.h>
 #include <Wire.h>
+=======
+#include <NimBLEDevice.h>
+
+>>>>>>> 9a7dc7815eec34bebb1383ab464d8d3cf3a0d96b
 
 // ---------- WiFi ----------
 #include <WiFi.h>
@@ -115,6 +120,7 @@ void startHilTestMode() {
             Serial.println();
         }
 
+<<<<<<< HEAD
         // ---------- RTLS ----------
         else if (cmd == "TEST_RTLS") {
             NimBLEScan* scan = BLEDevice::getScan();
@@ -122,10 +128,43 @@ void startHilTestMode() {
             scan->setActiveScan(true);
             scan->setInterval(45);
             scan->setWindow(15);
+=======
+        // ---------- RTLS (stubbed) ----------
+  
+        else if (cmd == "TEST_RTLS") {
+
+    NimBLEScan* scan = BLEDevice::getScan();
+    scan->stop();                 // <-- FIX: stop background scan
+    scan->setActiveScan(true);
+    scan->setInterval(45);
+    scan->setWindow(15);
+
+    scan->start(3, false);        // scan for 3 seconds
+
+    NimBLEScanResults results = scan->getResults();
+
+    StaticJsonDocument<512> doc;
+    JsonArray arr = doc.createNestedArray("rtls");
+
+    for (int i = 0; i < results.getCount(); i++) {
+        const NimBLEAdvertisedDevice* dev = results.getDevice(i);
+        JsonObject obj = arr.createNestedObject();
+        obj["mac"] = dev->getAddress().toString().c_str();
+        obj["rssi"] = dev->getRSSI();
+    }
+
+    scan->clearResults();
+
+    Serial.print("[TEST] ");
+    serializeJson(doc, Serial);
+    Serial.println();
+}
+>>>>>>> 9a7dc7815eec34bebb1383ab464d8d3cf3a0d96b
 
             scan->start(3, false);
             NimBLEScanResults results = scan->getResults();
 
+<<<<<<< HEAD
             StaticJsonDocument<512> doc;
             JsonArray arr = doc.createNestedArray("rtls");
 
@@ -163,11 +202,25 @@ void startHilTestMode() {
             Serial.print("[TEST] ");
             serializeJson(doc, Serial);
             Serial.println();
+=======
+
+        // ---------- WIFI ----------
+        else if (cmd == "TEST_WIFI") {
+            
+            bool wifi_ok = (WiFi.status() == WL_CONNECTED);
+
+            if (wifi_ok) {
+                Serial.println("[TEST] WIFI_OK");
+            } else {
+                Serial.println("[TEST] WIFI_FAIL");
+            }
+>>>>>>> 9a7dc7815eec34bebb1383ab464d8d3cf3a0d96b
         }
 
         // ---------- MQTT ----------
         else if (cmd == "TEST_MQTT") {
             bool mqtt_ok = mqttConnected();
+<<<<<<< HEAD
             Serial.println(mqtt_ok ? "[TEST] MQTT_OK" : "[TEST] MQTT_FAIL");
         }
 
@@ -222,6 +275,16 @@ void startHilTestMode() {
             Serial.println("[TEST] PROTOCOLS_SPI_OK");
             Serial.println("[TEST] PROTOCOLS_I2C_OK");              
           }
+=======
+
+            if (mqtt_ok) {
+                Serial.println("[TEST] MQTT_OK");
+            } else {
+                Serial.println("[TEST] MQTT_FAIL");
+            }
+        }
+
+>>>>>>> 9a7dc7815eec34bebb1383ab464d8d3cf3a0d96b
         // ---------- Unknown ----------
         else {
             Serial.println("[TEST] UNKNOWN_CMD");
