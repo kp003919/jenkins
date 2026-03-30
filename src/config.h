@@ -10,10 +10,6 @@
 // Device ID
 #define DEVICE_ID "ANCHOR_01"
 
-// WiFi credentials
-#define WIFI_SSID     "VM1080293"
-#define WIFI_PASSWORD "Omidmuhsin2015"
-
 // MQTT broker
 #define MQTT_SERVER "192.168.0.21"
 #define MQTT_PORT   1883

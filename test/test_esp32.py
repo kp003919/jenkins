@@ -62,7 +62,6 @@ def send_test(ser, cmd, max_ms=300):
 # Note: The actual commands and response formats must match what the ESP32 firmware is programmed to send.
 # The tests assume that the ESP32 is running a firmware that listens for these specific commands and responds accordingly.  
 
-
 @pytest.mark.hil
 def test_ping(ser):
     resp, latency = send_test(ser, "PING", max_ms=150)
@@ -165,7 +164,76 @@ def test_flash(ser):
     resp, latency = send_test(ser, "TEST_FLASH", max_ms=300)
     assert resp.startswith("[TEST] FLASH_SIZE")
     assert latency < 300
+    
 
+
+@pytest.mark.hil
+def test_proto(ser):
+    resp, latency = send_test(ser, "TEST_PROTO", max_ms=300)
+    assert resp.startswith("[TEST] PROTO")
+    assert latency < 300    
+
+@pytest.mark.hil
+def test_reset(ser):
+    resp, latency = send_test(ser, "TEST_RESET", max_ms=300)
+    assert "RESET_OK" in resp
+    assert latency < 300    
+    
+@pytest.mark.hil
+def test_deep_sleep(ser):
+    resp, latency = send_test(ser, "TEST_DEEP_SLEEP", max_ms=300)
+    assert "DEEP_SLEEP_OK" in resp
+    assert latency < 300    
+    
+@pytest.mark.hil
+def test_rtc(ser):
+    resp, latency = send_test(ser, "TEST_RTC", max_ms=300)
+    assert resp.startswith("[TEST] RTC")
+    assert latency < 300    
+
+@pytest.mark.hil
+def test_adc(ser):
+    resp, latency = send_test(ser, "TEST_ADC", max_ms=300)
+    assert resp.startswith("[TEST] ADC")
+    assert latency < 300    
+
+@pytest.mark.hil
+def test_pwm(ser):
+    resp, latency = send_test(ser, "TEST_PWM", max_ms=300)
+    assert "PWM_OK" in resp
+    assert latency < 300    
+    
+@pytest.mark.hil
+def test_spi(ser):
+    resp, latency = send_test(ser, "TEST_SPI", max_ms=300)
+    assert resp.startswith("[TEST] SPI")
+    assert latency < 300    
+    
+@pytest.mark.hil
+def test_i2c(ser):
+    resp, latency = send_test(ser, "TEST_I2C", max_ms=300)
+    assert resp.startswith("[TEST] I2C")
+    assert latency < 300    
+    
+@pytest.mark.hil 
+def test_uart(ser):
+    resp, latency = send_test(ser, "TEST_UART", max_ms=300)
+    assert resp.startswith("[TEST] UART")
+    assert latency < 300    
+    
+@pytest.mark.hil
+def test_ble(ser):
+    resp, latency = send_test(ser, "TEST_BLE", max_ms=300)
+    assert resp.startswith("[TEST] BLE")
+    assert latency < 300    
+
+@pytest.mark.hil
+def test_bt(ser):
+    resp, latency = send_test(ser, "TEST_BT", max_ms=300)
+    assert resp.startswith("[TEST] BT")
+    assert latency < 300
+    
+  
 
 # To run these tests, ensure that the ESP32 is connected to the specified COM port and is running the appropriate firmware that responds to the test commands.
 # Use the command `pytest test_esp32.py` to execute the tests.  

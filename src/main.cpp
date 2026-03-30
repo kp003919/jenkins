@@ -183,7 +183,6 @@ void loop() {
         else if (cmd == "TEST_NET") 
         { 
             bool wifi_ok = true;  // add function to return actual WiFi status if needed (e.g., WiFi.status() == WL_CONNECTED)  
-
             bool mqtt_ok = true; // You must add this method if not present 
             Serial.print("[TEST] NET "); 
             Serial.print(wifi_ok ? "WIFI_OK " : "WIFI_FAIL "); 
@@ -224,6 +223,7 @@ void loop() {
         RTLS_fill(doc);
         comms.sendTelemetry(doc);
         lastRTLS = now;
+        
     }
 
     delay(5);

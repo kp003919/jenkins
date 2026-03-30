@@ -34,7 +34,9 @@
 static WiFiClient plainClient;
 static PubSubClient mqtt(plainClient);
 
-static const char* NR_BROKER = "192.168.0.21";
+//static const char* NR_BROKER = "192.168.0.21";  // laptop 
+static const char* NR_BROKER = "192.168.0.92";    // PI 
+
 static const int   NR_PORT   = 1883;
 
 // Topics
@@ -42,8 +44,6 @@ static const char* TOPIC_TELEMETRY = "esp32/telemetry";
 static const char* TOPIC_FAN_CMD   = "esp32/anchor_01/fan/cmd";
 static const char * TOPIC_WIFI_CMD  = "esp32/anchor_01/wifi/cmd";
 static const char *TOPIC_PROTOCOLS = "device/protocols";
-
-
 
 
 /**
@@ -273,6 +273,7 @@ void WiFiMQTT::sendTelemetry(const JsonDocument& doc) {
     Serial.println(buf);
 
     mqtt.publish(TOPIC_TELEMETRY, buf);
+    mqtt.publish("test","to PI");
 }
 
 /**
