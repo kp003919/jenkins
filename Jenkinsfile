@@ -55,10 +55,7 @@ pipeline {
 
     post {
         always {
-            // Ensure junit runs INSIDE the agent context
-            node('hil') {
-                junit 'pytest-report.xml'
-            }
+            junit 'pytest-report.xml'
         }
     }
 }
