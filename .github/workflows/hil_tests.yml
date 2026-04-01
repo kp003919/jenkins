@@ -58,9 +58,12 @@ jobs:
         shell: powershell
         run: |
           Start-Sleep -Seconds 30
+
       - name: Run HIL tests
         run: |
           pytest -v
+
+      
 
       - name: Run HIL tests
         run: |
