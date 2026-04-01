@@ -50,6 +50,7 @@ jobs:
             -ArgumentList '-c "C:\Program Files\mosquitto\mosquitto_local.conf" -v'
 
       - name: Wait for ESP32 reboot
+        shell: cmd
         run: |
           timeout /t 5
 
