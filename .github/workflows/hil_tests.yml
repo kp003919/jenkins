@@ -49,10 +49,11 @@ jobs:
           Start-Process -FilePath "C:\Program Files\mosquitto\mosquitto.exe" `
             -ArgumentList '-c "C:\Program Files\mosquitto\mosquitto_local.conf" -v'
 
-      - name: Wait for ESP32 reboot
-        shell: cmd
+     - name: Wait for ESP32 reboot
+        shell: powershell
         run: |
-          timeout /t 5
+          Start-Sleep -Seconds 30
+
 
       - name: Run HIL tests
         run: |
