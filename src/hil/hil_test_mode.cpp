@@ -10,6 +10,7 @@
 #include <TinyGPSPlus.h>
 
 DHT dht(DHTPIN, DHT22);
+#define ADC_PIN 34
 TinyGPSPlus gps;
 HardwareSerial GPS_Serial(1);
 
