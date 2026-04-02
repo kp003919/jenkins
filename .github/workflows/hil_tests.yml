@@ -64,11 +64,11 @@ jobs:
           path: hil_report.xml
 
       - name: Add summary to GitHub Actions UI
-        shell: bash
+        shell: powershell
         run: |
-          echo "## ESP32 HIL Test Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Firmware:** hil_test" >> $GITHUB_STEP_SUMMARY
-          echo "**Report:** hil_report.xml (attached as artifact)" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "All tests executed. Download the artifact for full details." >> $GITHUB_STEP_SUMMARY
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "## ESP32 HIL Test Summary"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value ""
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "**Firmware:** hil_test"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "**Report:** hil_report.xml (attached as artifact)"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value ""
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "All tests executed. Download the artifact for full details."
