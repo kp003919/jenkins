@@ -145,12 +145,24 @@ void startHilTestMode() {
         else if (cmd == "TEST_MQTT_PUB") {
             Serial.println(mqttConnected() ? "[TEST] MQTT_PUB_OK" : "[TEST] MQTT_PUB_FAIL");
         }
-
-        // ---------- NEW: MQTT END-TO-END ----------
         else if (cmd == "TEST_MQTT_E2E") {
             StaticJsonDocument<128> doc;
             doc["connected"] = mqttConnected();
-            doc["msg"] = "hello";  // Replace with real received payload
+            doc["msg"] = "hello";
+            Serial.print("[TEST] ");
+            serializeJson(doc, Serial);
+            Serial.println();
+        }
+
+        // ---------- NEW: MQTT PAYLOAD ECHO ----------
+        else if (cmd.startsWith("TEST_MQTT_PAYLOAD")) {
+            String payload = cmd.substring(strlen("TEST_MQTT_PAYLOAD"));
+            payload.trim();
+
+            StaticJsonDocument<128> doc;
+            doc["connected"] = mqttConnected();
+            doc["msg"] = payload;
+
             Serial.print("[TEST] ");
             serializeJson(doc, Serial);
             Serial.println();
@@ -174,10 +186,9 @@ void startHilTestMode() {
             Serial.println();
         }
 
-        // ---------- NEW: I2C FUNCTIONAL READ ----------
         else if (cmd == "TEST_I2C_READ") {
-            const uint8_t addr = 0x68;  // MPU6050
-            const uint8_t reg  = 0x75;  // WHO_AM_I
+            const uint8_t addr = 0x68;
+            const uint8_t reg  = 0x75;
 
             Wire.beginTransmission(addr);
             Wire.write(reg);
@@ -265,7 +276,6 @@ void startHilTestMode() {
             Serial.println("[TEST] SPI");
         }
 
-        // ---------- NEW: SPI LOOPBACK ----------
         else if (cmd == "TEST_SPI_LOOP") {
             SPI.begin();
             const uint8_t testByte = 0xA5;
@@ -293,7 +303,6 @@ void startHilTestMode() {
         else if (cmd == "TEST_BLE") Serial.println("[TEST] BLE");
         else if (cmd == "TEST_BT")  Serial.println("[TEST] BT");
 
-        // ---------- NEW: BLE MATCH ----------
         else if (cmd == "TEST_BLE_MATCH") {
             const char* TARGET_MAC = "AA:BB:CC:DD:EE:FF";
 
